@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El Rincón del Goloso - Pedido</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+<body>
+    <div class="container">
+        <div class="container-fluid">
+        <!-- Barra de navegación (Menú de hamburguesa) -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light mb-2">
+            <div class="container-fluid">
+                <!-- Logo o Título -->
+                <a class="navbar-brand" href="#">El Rincón del Goloso</a>
+                
+                <!-- Botón para el menú hamburguesa -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Elementos del menú -->
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="#">Inicio</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('detalle') }}">Detalle</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('consultar_info') }}">Información</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('caja') }}">Caja</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('crear_producto') }}">Productos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('inicio_sesion') }}">Inicio Sesion</a>
+                        </li>
+                        
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('ver_usuarios') }}">Ver usuarios<s/a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Buscador -->
+        <div class="row mb-4 mt-0">  <!-- Elimina cualquier margen superior con mt-0 -->
+            <div class="col-12 d-flex">
+                <input type="text" class="form-control" placeholder="Buscar Producto...">
+                <button class="btn btn-primary ms-2">
+                    <img src="search-icon.png" alt="Buscar" class="img-fluid" style="width: 20px; height: 20px;">
+                </button>
+            </div>
+        </div>
+    </div>
+
+        <!-- Lista de Productos (contenedor desplazable) -->
+        <dv class="scrollable-container mb-4">
+            <div class="row">
+                <!-- Producto 1 -->
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
+                    <p><b>Completo Chico</b></p>
+                    <div class="product-item">
+                        <img src="{{ url_for('static', filename='img/hotdog.png') }}" class="img-fluid" alt="Producto">
+                        <div class="quantity d-flex justify-content-center mt-2">
+                            <button class="btn btn-secondary minus">-</button>
+                            <input type="text" value="0" class="counter mx-2" readonly>
+                            <button class="btn btn-secondary plus">+</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Producto 2 -->
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
+                    <p><b>Lata de Bebida</b></p>
+                    <div class="product-item">
+                        <img src="{{ url_for('static', filename='img/lata.png') }}" class="img-fluid" alt="Producto">
+                        <div class="quantity d-flex justify-content-center mt-2">
+                            <button class="btn btn-secondary minus">-</button>
+                            <input type="text" value="0" class="counter mx-2" readonly> 
+                            <button class="btn btn-secondary plus">+</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Producto 3 -->
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
+                    <p><b>Fajita</b></p>
+                    <div class="product-item">
+                        <img src="{{ url_for('static', filename='img/burrito.png') }}" class="img-fluid" alt="Producto">
+                        <div class="quantity d-flex justify-content-center mt-2">
+                            <button class="btn btn-secondary minus">-</button>
+                            <input type="text" value="0" class="counter mx-2" readonly>
+                            <button class="btn btn-secondary plus">+</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Producto 4 -->
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
+                    <p><b>Churrasco</b></p>
+                    <div class="product-item">
+                        <img src="{{ url_for('static', filename='img/churrasco.png') }}" class="img-fluid" alt="Producto">
+                        <div class="quantity d-flex justify-content-center mt-2">
+                            <button class="btn btn-secondary minus">-</button>
+                            <input type="text" value="0" class="counter mx-2" readonly>
+                            <button class="btn btn-secondary plus">+</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Producto 5-->
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
+                    <p><b>Hamburguesa</b></p>
+                    <div class="product-item">
+                        <img src="{{ url_for('static', filename='img/burger.png') }}" class="img-fluid" alt="Producto">
+                        <div class="quantity d-flex justify-content-center mt-2">
+                            <button class="btn btn-secondary minus">-</button>
+                            <input type="text" value="0" class="counter mx-2" readonly>
+                            <button class="btn btn-secondary plus">+</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Producto 6-->
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
+                    <p><b>Score Energy</b></p>
+                    <div class="product-item">
+                        <img src="{{ url_for('static', filename='img/score.png') }}" class="img-fluid" alt="Producto">
+                        <div class="quantity d-flex justify-content-center mt-2">
+                            <button class="btn btn-secondary minus">-</button>
+                            <input type="text" value="0" class="counter mx-2" readonly>
+                            <button class="btn btn-secondary plus">+</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Producto 7-->
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
+                    <p><b>Monster Energy</b></p>
+                    <div class="product-item">
+                        <img src="{{ url_for('static', filename='img/monster.png') }}" class="img-fluid" alt="Producto">
+                        <div class="quantity d-flex justify-content-center mt-2">
+                            <button class="btn btn-secondary minus">-</button>
+                            <input type="text" value="0" class="counter mx-2" readonly>
+                            <button class="btn btn-secondary plus">+</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Producto 8-->
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
+                    <p><b>Papas Fritas</b></p>
+                    <div class="product-item">
+                        <img src="{{ url_for('static', filename='img/papas.png') }}" class="img-fluid" alt="Producto">
+                        <div class="quantity d-flex justify-content-center mt-2">
+                            <button class="btn btn-secondary minus">-</button>
+                            <input type="text" value="0" class="counter mx-2" readonly>
+                            <button class="btn btn-secondary plus">+</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Producto 5-->
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
+                    <p><b>Hamburguesa</b></p>
+                    <div class="product-item">
+                        <img src="{{ url_for('static', filename='img/burger.png') }}" class="img-fluid" alt="Producto">
+                        <div class="quantity d-flex justify-content-center mt-2">
+                            <button class="btn btn-secondary minus">-</button>
+                            <input type="text" value="0" class="counter mx-2" readonly>
+                            <button class="btn btn-secondary plus">+</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Producto 6-->
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
+                    <p><b>Score Energy</b></p>
+                    <div class="product-item">
+                        <img src="{{ url_for('static', filename='img/score.png') }}" class="img-fluid" alt="Producto">
+                        <div class="quantity d-flex justify-content-center mt-2">
+                            <button class="btn btn-secondary minus">-</button>
+                            <input type="text" value="0" class="counter mx-2" readonly>
+                            <button class="btn btn-secondary plus">+</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Producto 7-->
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
+                    <p><b>Monster Energy</b></p>
+                    <div class="product-item">
+                        <img src="{{ url_for('static', filename='img/monster.png') }}" class="img-fluid" alt="Producto">
+                        <div class="quantity d-flex justify-content-center mt-2">
+                            <button class="btn btn-secondary minus">-</button>
+                            <input type="text" value="0" class="counter mx-2" readonly>
+                            <button class="btn btn-secondary plus">+</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Producto 8-->
+                <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
+                    <p><b>Papas Fritas</b></p>
+                    <div class="product-item">
+                        <img src="{{ url_for('static', filename='img/papas.png') }}" class="img-fluid" alt="Producto">
+                        <div class="quantity d-flex justify-content-center mt-2">
+                            <button class="btn btn-secondary minus">-</button>
+                            <input type="text" value="0" class="counter mx-2" readonly>
+                            <button class="btn btn-secondary plus">+</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Botón de Realizar Pedido -->
+        <div class="order-button text-center mb-4">
+            <button class="btn btn-success btn-lg">REALIZAR PEDIDO</button>
+        </div>
+
+
+    </div>
+        <!-- Pie de Página -->
+        <footer class="text-center mt-4">
+            <p>Creado por J. Gonzalez, M. Espinosa y C. Salazar</p>
+        </footer>
+    <!-- Enlazamos el archivo home.js -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/home.js') }}"></script>
+</body>
+</html>
