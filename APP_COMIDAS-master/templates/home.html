@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El Rincón del Goloso - Pedido</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Establece una altura fija para el contenedor de productos */
+        .scrollable-products {
+            height: 400px; /* Ajusta la altura según sea necesario */
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <!-- Contenedor Principal -->
+    <div class="container">
+        <!-- Barra de navegación (Menú de hamburguesa) -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-light mb-2">
+            <div class="container-fluid">
+                <!-- Logo o Título -->
+                <a class="navbar-brand" href="#">El Rincón del Goloso</a>
+                
+                <!-- Botón para el menú hamburguesa -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Elementos del menú -->
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="#">Inicio</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('detalle') }}">Detalle</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('consultar_info') }}">Información</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('caja') }}">Caja</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('crear_producto') }}">Productos</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('ver_usuarios') }}">Ver usuarios</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Buscador -->
+        <div class="row mb-4 mt-0">
+            <div class="col-12 d-flex">
+                <input type="text" class="form-control" placeholder="Buscar Producto...">
+                <button class="btn btn-primary ms-2">
+                    <img src="search-icon.png" alt="Buscar" class="img-fluid" style="width: 20px; height: 20px;">
+                </button>
+            </div>
+        </div>
+
+        <!-- Lista de Productos (contenedor desplazable) -->
+        <div class="row scrollable-products">
+            {% for product in products %}
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
+                <div class="card">
+                    <img src="{{ url_for('static', filename='img/default.png') }}" class="card-img-top" alt="Producto">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ product.nombre }}</h5>
+                        <p class="card-text">{{ product.detalle }}</p>
+                        <p>Precio: ${{ product.precio }}</p>
+                        <p>Stock disponible: {{ product.stock }}</p>
+                        <div class="quantity d-flex justify-content-center mt-2">
+                            <button class="btn btn-secondary minus">-</button>
+                            <input type="text" value="0" class="counter mx-2" readonly>
+                            <button class="btn btn-secondary plus">+</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Botón de Realizar Pedido -->
+        <div class="text-center mb-4">
+            <button class="btn btn-success btn-lg">REALIZAR PEDIDO</button>
+        </div>
+    </div>
+
+    <!-- Pie de Página -->
+    <footer class="text-center mt-4">
+        <p>Creado por J. Gonzalez, M. Espinosa y C. Salazar</p>
+    </footer>
+
+    <!-- Enlazamos el archivo home.js -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/home.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+{% block title %}Consultar Información{% endblock %}
+
+{% block content %}
+<h2>Consultar Información</h2>
+<form method="POST">
+    <label for="tipo_consulta">Tipo de Consulta:</label><br>
+    <select id="tipo_consulta" name="tipo_consulta">
+        <option value="producto">Producto</option>
+        <option value="categoria">Categoría</option>
+    </select><br>
+    <label for="id_entidad">ID Entidad:</label><br>
+    <input type="number" id="id_entidad" name="id_entidad" required><br>
+    <input type="submit" value="Consultar">
+</form>
+
+{% if info %}
+<h3>Información:</h3>
+<pre>{{ info }}</pre>
+{% endif %}
+{% endblock %}
