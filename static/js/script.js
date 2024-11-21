@@ -107,3 +107,4 @@ document.addEventListener('DOMContentLoaded', () => {
     // Verificar si hay un usuario logueado al cargar la página
     checkLoggedIn();
 });
+

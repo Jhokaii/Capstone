@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block title %}Menú{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 style="text-align: center; font-style: oblique; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">Menú de Productos</h1>
+
+    <!-- Botón para ver el carrito -->
+    <div class="d-flex justify-content-end mb-4">
+        <a href="{{ url_for('ver_carrito') }}" class="btn btn-success">Ver Carrito</a>
+    </div>
+
+    <!-- Carrusel -->
+    <div id="menuCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            {% for producto in productos %}
+            <div class="carousel-item {% if loop.first %}active{% endif %}">
+                <div class="d-flex justify-content-center">
+                    <!-- Tarjeta del producto -->
+                    <div class="card" style="width: 24rem; height: 8cm;">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ producto.nombre }}</h5>
+                            <p class="card-text">{{ producto.descripcion }}</p>
+                            <p class="card-text">Precio: ${{ producto.precio }}</p>
+                            <p class="card-text">Stock Disponible: {{ producto.stock }}</p>
+                            
+                            {% if producto.stock > 0 %}
+                            <!-- Botón de agregar al carrito -->
+                            <button 
+                                class="btn btn-primary agregar-carrito-btn" 
+                                data-id="{{ producto.id_producto }}" 
+                                data-nombre="{{ producto.nombre }}" 
+                                data-precio="{{ producto.precio }}">
+                                Agregar al Carrito
+                            </button>
+                            {% else %}
+                            <button class="btn btn-secondary" disabled>Sin Stock</button>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Controles del carrusel -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#menuCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Anterior</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#menuCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Siguiente</span>
+        </button>
+    </div>
+</div>
+
+<!-- Script para manejar AJAX -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Seleccionar todos los botones de agregar al carrito
+    const botones = document.querySelectorAll('.agregar-carrito-btn');
+
+    // Agregar evento de clic a cada botón
+    botones.forEach(boton => {
+        boton.addEventListener('click', function () {
+            const productoId = boton.dataset.id;
+            const nombre = boton.dataset.nombre;
+            const precio = boton.dataset.precio;
+
+            // Realizar la solicitud AJAX
+            fetch('{{ url_for("agregar_al_carrito_ajax") }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    producto_id: productoId,
+                    nombre: nombre,
+                    precio: precio
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert(data.message); // Mostrar mensaje de éxito
+                } else {
+                    alert(data.message); // Mostrar mensaje de error
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Ocurrió un error al intentar agregar al carrito.');
+            });
+        });
+    });
+});
+</script>
+{% endblock %}

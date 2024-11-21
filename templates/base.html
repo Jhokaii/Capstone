@@ -3,26 +3,128 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Gestión de Inventario{% endblock %}</title>
+    <title>{% block title %}Mi Proyecto{% endblock %}</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <style>
+        /* Estilos de alerta */
+        .alert {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            color: white;
+            z-index: 1000;
+            opacity: 0.9;
+        }
+        .alert.success { background-color: #4CAF50; } /* Éxito */
+        .alert.error { background-color: #f44336; }   /* Error */
+    
+        /* Estilos de navbar */
+        nav {
+            background-color: #333;
+            padding: 10px;
+            position: fixed; /* Fija el navbar */
+            top: 0;
+            left: 0;
+            width: 100%; /* Asegura que ocupe todo el ancho */
+            z-index: 1000; /* Siempre encima del contenido */
+        }
+    
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+    
+        nav ul li {
+            float: left;
+        }
+    
+        nav ul li a {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+    
+        nav ul li a:hover {
+            background-color: #555;
+        }
+    
+        /* Contenido principal ajustado para no superponerse al navbar */
+        .content {
+            margin-top: 60px; /* Ajusta este valor según la altura del navbar */
+            padding: 20px;
+        }
+    </style>
+    
 </head>
 <body>
-    <header>
-        <h1>El Rincon del Goloso</h1>
-    </header>
-    <nav>
-        <ul>
-            <li><a href="{{ url_for('crear_producto') }}">Registrar Productos</a></li>
-            <li><a href="{{ url_for('crear_categoria') }}">Registrar Categorías</a></li>
-        </ul>
+
+    <!-- Navbar: Solo se muestra si show_navbar es True -->
+    {% if show_navbar is defined and show_navbar %}
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{{ url_for('home') }}">Inicio</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('menu') }}">Menú</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('listar_boletas') }}">Boletas</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('crear_producto') }}">Crear Productos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('ver_usuarios') }}">Ver usuarios</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </nav>
-    <main>
-        {% block content %}
-        {% endblock %}
-    </main>
-    <footer>
-        <p>&copy; 2024 J.G.-M.E-C.S.</p>
-    </footer>
+    {% endif %}
+
+    <!-- Contenido principal -->
+    <div class="content">
+        {% block content %}{% endblock %}
+    </div>
+
+    <!-- Bloque para mostrar las alertas flotantes -->
+    {% with messages = get_flashed_messages(with_categories=True) %}
+      {% if messages %}
+        <div id="alert-container">
+          {% for category, message in messages %}
+            <div class="alert {{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <!-- JavaScript para ocultar las alertas después de 5 segundos -->
+    <script>
+        setTimeout(function() {
+            var alerts = document.querySelectorAll('.alert');
+            alerts.forEach(function(alert) {
+                alert.style.display = 'none';
+            });
+        }, 5000);
+    </script>
+    <!-- Bootstrap Bundle JS (incluye Popper.js) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>
-

@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Simulación de Pago{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Simulación de Pago</h1>
+    <p>Total a pagar: ${{ total }}</p>
+    <form method="POST" action="{{ url_for('simulacion_pago') }}">
+        <label for="metodo_pago">Método de Pago:</label>
+        <select id="metodo_pago" name="metodo_pago" required>
+            <option value="Efectivo">Efectivo</option>
+            <option value="Tarjeta">Tarjeta</option>
+            <option value="Transferencia">Transferencia</option>
+        </select>
+        <br><br>
+        <button type="submit" class="btn btn-primary">Realizar Pago</button>
+    </form>
+</div>
+{% endblock %}

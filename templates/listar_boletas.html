@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Listado de Boletas{% endblock %}
+
+{% block content %}
+<div class="boletas-container">
+    <h1 class="boletas-title">Listado de Boletas</h1>
+    <table class="boletas-table">
+        <thead>
+            <tr>
+                <th>ID Pago</th>
+                <th>Fecha</th>
+                <th>Monto Total</th>
+                <th>Método de Pago</th>
+                <th>Acción</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for boleta in boletas %}
+            <tr>
+                <td>{{ boleta.id_pago }}</td>
+                <td>{{ boleta.fecha_pago }}</td>
+                <td>${{ boleta.monto_total }}</td>
+                <td>{{ boleta.metodo_pago }}</td>
+                <td>
+                    <a href="{{ url_for('boleta_pdf', id_pago=boleta.id_pago) }}" class="btn btn-primary" target="_blank">Ver PDF</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

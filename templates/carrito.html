@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Carrito de Compras{% endblock %}
+
+{% block content %}
+<div class="carrito-container">
+    <h1 class="carrito-title">Carrito de Compras</h1>
+    {% if carrito %}
+        <table class="carrito-table">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Precio Unitario</th>
+                    <th>Precio Total</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in carrito %}
+                <tr>
+                    <td>{{ item['nombre'] }}</td>
+                    <td>{{ item['cantidad'] }}</td>
+                    <td>${{ item['precio_unitario'] }}</td>
+                    <td>${{ item['precio_total'] }}</td>
+                    <td>
+                        <form action="{{ url_for('eliminar_unidad', producto_id=item['id']) }}" method="post" style="display:inline;">
+                            <button type="submit" class="btn btn-danger">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <p class="carrito-total">Total del Carrito: ${{ total }}</p>
+        
+        <div class="carrito-actions">
+            <!-- Botón para vaciar el carrito -->
+            <form action="/vaciar_carrito" method="post">
+                <button type="submit" class="btn btn-danger">Vaciar Carrito</button>
+            </form>
+
+            <!-- Botón para terminar y pagar -->
+            <form method="GET" action="{{ url_for('simulacion_pago') }}">
+                <button type="submit" class="btn btn-primary">Terminar y Pagar</button>
+            </form>
+        </div>
+        
+    {% else %}
+        <p>Tu carrito está vacío.</p>
+        <!-- Botón para regresar al menú -->
+        <a href="{{ url_for('menu') }}" class="btn btn-primary">Volver al Menú</a>
+    {% endif %}
+</div>
+{% endblock %}
