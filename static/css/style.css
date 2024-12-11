@@ -1,0 +1,137 @@
+/* === Reset y Estilos Generales === */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+/* === Layout Principal === */
+.center-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+}
+.content-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* === Componentes === */
+/* Contenedor de Login */
+.login-container {
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 300px;
+}
+/* Alertas */
+.alert-container {
+    margin: 10px 0;
+}
+.alert {
+    padding: 10px;
+    margin-bottom: 15px;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 14px;
+}
+.alert.success {
+    background-color: #d4edda;
+    color: #155724;
+}
+.alert.error {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* Botones */
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+    text-align: center;
+}
+.btn:hover {
+    background-color: #0056b3;
+}
+.scrollable-products {
+    height: 400px;
+    overflow-y: auto;
+}
+.center-button {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+footer {
+    margin-top: 20px;
+}
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #dbb1ad; /* Color de fondo deseado */
+    font-family: 'Arial', sans-serif;
+    color: black;
+}
+#loginForm label, #loginForm input, #loginForm button {
+    color: #0a0a0a;
+}
+
+#loginForm input[type="text"],
+#loginForm input[type="password"] {
+    background-color: #333333;
+    color: white;
+    border: 1px solid #ffffff;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+#loginForm button {
+    background-color: #007bff;
+    color: #ffffff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.btn-register {
+    color: #4818ca;
+}
+
+.content-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding-top: 20px;
+}
+
+.container {
+    max-width: 800px; /* Ajusta el ancho según el diseño */
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    color: #333;
+    text-align: center;
+}
+.navbar-container {
+    margin-top: 20px; /* Espacio superior para que el navbar no esté tan pegado */
+    padding: 10px;
+    background-color: #f8f9fa; /* Color de fondo del contenedor */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.navbar .nav-link {
+    color: #4CAF50 !important; /* Color de los enlaces del navbar */
+}
+.navbar .nav-link:hover {
+    color: #3e8e41 !important; /* Color de los enlaces al pasar el ratón */
+}

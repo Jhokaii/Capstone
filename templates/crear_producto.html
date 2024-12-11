@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+
+{% block title %}Gestionar Productos{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Crear Producto -->
+    <div class="form-container mb-4">
+        <h2 style="text-align: center; font-family: 'Times New Roman', Times, serif;">Crear Producto</h2>
+        <form id="productForm" onsubmit="return agregarProducto(event)">
+            <div class="form-group">
+                <label for="nombre">Nombre del Producto:</label>
+                <input type="text" id="nombre" name="nombre" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="precio">Precio:</label>
+                <input type="number" id="precio" name="precio" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="stock">Stock:</label>
+                <input type="number" id="stock" name="stock" class="form-control" required>
+            </div>
+            <center><button type="submit" class="btn btn-success mt-3">Agregar Producto</button></center>
+        </form>
+    </div>
+
+    <!-- Actualizar Stock -->
+    <div class="form-container mb-4">
+        <h2 style="text-align: center; font-family: 'Times New Roman', Times, serif;">Actualizar Stock de Producto</h2>
+        <form id="stockEditForm" onsubmit="return editarStock(event)">
+            <div class="form-group">
+                <label for="producto_existente_editar">Producto:</label>
+                <select id="producto_existente_editar" name="producto_existente" class="form-control" required></select>
+            </div>
+            <div class="form-group">
+                <label for="nuevo_stock_editar">Nuevo Stock:</label>
+                <input type="number" id="nuevo_stock_editar" name="nuevo_stock" class="form-control" required>
+            </div>
+            <center><button type="submit" class="btn btn-primary mt-3">Actualizar Stock</button></center>
+        </form>
+    </div>
+
+    <!-- Eliminar Producto -->
+    <div class="form-container">
+        <h2 style="text-align: center; font-family: 'Times New Roman', Times, serif;">Eliminar Producto</h2>
+        <form id="deleteProductForm" onsubmit="return eliminarProducto(event)">
+            <div class="form-group">
+                <label for="producto_existente_eliminar">Producto:</label>
+                <select id="producto_existente_eliminar" name="producto_existente" class="form-control" required></select>
+            </div>
+            <center><button type="submit" class="btn btn-danger mt-3">Eliminar Producto</button></center>
+        </form>
+    </div>
+</div>
+
+<p id="message" class="mt-4"></p> <!-- Mensaje de éxito o error -->
+
+<script>
+function agregarProducto(event) {
+    event.preventDefault();
+
+    const nombre = document.getElementById('nombre').value;
+    const precio = document.getElementById('precio').value;
+    const stock = document.getElementById('stock').value;
+
+    fetch('/crear_producto', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nombre: nombre, precio: precio, stock: stock })
+    })
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById('message').innerText = data.message;
+        document.getElementById('productForm').reset();
+        cargarProductos();
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        document.getElementById('message').innerText = "Error al agregar el producto.";
+    });
+}
+
+function editarStock(event) {
+    event.preventDefault();
+
+    const productoId = document.getElementById('producto_existente_editar').value;
+    const nuevoStock = document.getElementById('nuevo_stock_editar').value;
+
+    fetch('/editar_stock', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id_producto: productoId, nuevo_stock: nuevoStock })
+    })
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById('message').innerText = data.message;
+        document.getElementById('stockEditForm').reset();
+        cargarProductos();
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        document.getElementById('message').innerText = "Error al actualizar el stock.";
+    });
+}
+
+function eliminarProducto(event) {
+    event.preventDefault();
+
+    const productoId = document.getElementById('producto_existente_eliminar').value;
+
+    fetch('/eliminar_producto', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id_producto: productoId })
+    })
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById('message').innerText = data.message;
+        document.getElementById('deleteProductForm').reset();
+        cargarProductos();
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        document.getElementById('message').innerText = "Error al eliminar el producto.";
+    });
+}
+
+function cargarProductos() {
+    fetch('/obtener_productos')
+        .then(response => response.json())
+        .then(data => {
+            const editSelect = document.getElementById('producto_existente_editar');
+            const deleteSelect = document.getElementById('producto_existente_eliminar');
+            editSelect.innerHTML = '';
+            deleteSelect.innerHTML = '';
+            data.forEach(producto => {
+                const option = document.createElement('option');
+                option.value = producto.id_producto;
+                option.textContent = `${producto.nombre} (Stock: ${producto.stock})`;
+                editSelect.appendChild(option);
+                deleteSelect.appendChild(option.cloneNode(true));
+            });
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+}
+
+document.addEventListener('DOMContentLoaded', cargarProductos);
+</script>
+{% endblock %}

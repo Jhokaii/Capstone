@@ -1,0 +1,675 @@
+/* Reset básico */
+body, h1, h2, p, a, input, button {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    box-sizing: border-box;
+}
+
+/* Cuerpo */
+body {
+    background-image: url('/static/img/banner.png');
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column; /* Para que el contenido fluya verticalmente */
+}
+
+/* Contenedor principal de la página de inicio */
+.home-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    min-height: calc(100vh - 60px); /* Ajuste dinámico para no superponerse al navbar */
+    padding: 20px;
+    box-sizing: border-box;
+}
+.navbar {
+    background-image: url('/static/img/navbar.png'); /* Ruta a tu imagen */
+    background-size: 100%; /* Ajusta la imagen para cubrir todo el navbar */
+    background-position: center; /* Centra la imagen */
+    background-repeat: no-repeat; /* No repite la imagen */
+    color: white; /* Asegura que el texto sea visible */
+    padding: 10px; /* Ajusta el espaciado */
+    position: fixed; /* Fija el navbar */
+    top: 0;
+    height: 70px;
+    left: 0;
+    width: 100%; /* Asegura que ocupe todo el ancho */
+    z-index: 1000; /* Siempre encima del contenido */
+}
+
+.navbar a {
+    color: white; /* Asegura que los enlaces sean visibles */
+}
+
+.navbar a:hover {
+    text-decoration: underline;
+    color: #ffeb3b; /* Agrega un color llamativo al pasar el cursor */
+}
+.navbar::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Color negro con 50% de opacidad */
+    z-index: -1; /* Se coloca detrás del contenido */
+}
+.navbar-collapse {
+    background-color: #333; /* Fondo del menú desplegable */
+    z-index: 1050; /* Asegura que esté encima de otros elementos */
+}
+
+.navbar-toggler {
+    border-color: rgba(255, 255, 255, 0.5); /* Color del borde del botón */
+}
+
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255, 255, 255, 0.5)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+}
+
+.nav-item .nav-link {
+    color: white; /* Color del texto */
+}
+
+.nav-item .nav-link:hover,
+.nav-item .nav-link.active {
+    background-color: #555; /* Fondo al pasar el mouse o si está activo */
+    color: white;
+    border-radius: 5px;
+}
+/* Título de bienvenida */
+.welcome-title {
+    font-size: 70px;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+    margin-bottom: 10px;
+    color: #ffffff;
+}
+
+/* Texto descriptivo */
+.welcome-text {
+    font-size: 30px;
+    margin-bottom: 20px;
+    font-weight: bold;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #d3d3d3;
+}
+
+/* Botón centrado */
+.center-button {
+    margin-top: 20px;
+}
+
+.center-button .btn {
+    padding: 15px 30px;
+    font-size: 18px;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+}
+
+.center-button .btn:hover {
+    background-color: #28a745;
+    transform: scale(1.05); /* Efecto de ampliación */
+}
+
+/* Contenedor de las tarjetas del menú */
+.menu-container {
+    display: flex;
+    flex-wrap: wrap; /* Ajuste dinámico */
+    justify-content: center; /* Centrado horizontal */
+    gap: 20px; /* Espaciado entre las tarjetas */
+    padding: 20px;
+    margin-top: 200px;
+}
+/* Fondo de la tarjeta */
+.card {
+    background-color: #ffffffb8; /* Blanco */
+    border: 1px solid #9d9090; /* Borde gris claro */
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    padding: 20px;
+    justify-content: center;
+    text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+/* Hover sobre la tarjeta */
+.card:hover {
+    transform: translateY(-5px); /* Elevar tarjeta */
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2); /* Aumentar sombra */
+}
+
+/* Títulos y texto */
+.card h5 {
+    font-size: 27px;
+    font-weight: bold;
+    color: #333333; /* Gris oscuro */
+}
+
+.card p {
+    font-size: 18px;
+    color: #666666; /* Gris medio */
+}
+
+/* Precio */
+.card .precio {
+    font-size: 16px;
+    font-weight: bold;
+    color: #0dcf0a; /* Verde */
+}
+
+/* Botón */
+.card .btn {
+    background-color: #28A745; /* Verde más intenso */
+    color: #FFFFFF; /* Texto blanco */
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.card .btn:hover {
+    background-color: #014710; /* Verde más oscuro */
+    cursor: pointer;
+}
+
+
+.centrado {
+    text-align: center;
+    align-content: center;
+    align-items: center;
+}
+
+
+/* Tabla del listado de boletas */
+.boletas-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #ffffff;
+}
+
+.boletas-table th, .boletas-table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+.boletas-table th {
+    background-color: #f8f9fa;
+    font-weight: bold;
+    color: #333;
+}
+
+.boletas-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.boletas-table tr:hover {
+    background-color: #e9ecef;
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+    .home-container {
+        padding: 15px;
+    }
+
+    .welcome-title {
+        font-size: 28px;
+    }
+
+    .welcome-text {
+        font-size: 16px;
+    }
+
+    .center-button .btn {
+        font-size: 16px;
+        padding: 12px 20px;
+    }
+
+
+    input {
+        font-size: 16px;
+    }
+
+    button.btn {
+        font-size: 16px;
+    }
+
+
+    .card {
+        width: 90%; /* Tarjetas más estrechas en pantallas pequeñas */
+    }
+}
+/* Contenedor principal del carrito */
+.carrito-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    max-width: 900px;
+}
+
+/* Título del carrito */
+.carrito-title {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+    text-align: center;
+}
+/* Ajustes específicos para la tabla del carrito */
+.carrito-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    table-layout: fixed; /* Hace que las columnas tengan un ancho fijo */
+}
+
+.carrito-table th, .carrito-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: center;
+    word-wrap: break-word; /* Permite que el texto largo se ajuste */
+    white-space: nowrap; /* Evita que el contenido se desborde */
+    overflow: hidden;
+    text-overflow: ellipsis; /* Agrega "..." si el texto es muy largo */
+}
+
+/* Asegurarse de que las celdas numéricas sean legibles */
+.carrito-table td {
+    vertical-align: middle; /* Centra el contenido verticalmente */
+}
+
+/* Encabezados de tabla */
+.carrito-table th {
+    background-color: #f8f9fa;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+    .carrito-table th, .carrito-table td {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    .carrito-table {
+        font-size: 14px;
+    }
+}
+
+
+/* Botones */
+.btn-danger, .btn-primary {
+    padding: 10px 15px;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-danger {
+    background-color: #e74c3c;
+    color: #fff;
+    border: none;
+}
+
+.btn-danger:hover {
+    background-color: #c0392b;
+    transform: scale(1.05);
+}
+
+.btn-primary {
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #2980b9;
+    transform: scale(1.05);
+}
+
+/* Total del carrito */
+.carrito-total {
+    font-size: 18px;
+    font-weight: bold;
+    text-align: right;
+    margin-top: 15px;
+    color: #2c3e50;
+}
+
+/* Botones de acción (Vaciar carrito y Terminar) */
+.carrito-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.carrito-actions .btn-danger {
+    flex: 1;
+    margin-right: 10px;
+}
+
+.carrito-actions .btn-primary {
+    flex: 1;
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+    .carrito-container {
+        padding: 15px;
+    }
+
+    .carrito-table th, .carrito-table td {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    .btn-danger, .btn-primary {
+        font-size: 12px;
+        padding: 8px;
+    }
+
+    .carrito-total {
+        font-size: 16px;
+    }
+}
+/* Estilos específicos para Login y Register */
+.login-container {
+    background-color: rgb(126, 73, 73);
+    padding: 20px 20px;
+    border-radius: 30px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    margin-top: 10px;
+    max-width: 400px;
+    text-align: center;
+    align-content: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: auto;
+}
+
+.login-container label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #ffffff;
+    text-align: left;
+    width: 100%;
+}
+
+.login-container input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    margin-bottom: 15px;
+}
+
+.login-container input:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+.login-container button.btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.login-container button.btn-primary {
+    background-color: #007bff;
+    color: white;
+}
+
+.login-container button.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+.login-container .register-link {
+    margin-top: 15px;
+    color: #ffffff;
+    font-size: 14px;
+}
+
+.login-container a.btn-register {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+.login-container a.btn-register:hover {
+    text-decoration: none;
+}
+
+/* Responsividad para Login */
+@media (max-width: 768px) {
+    .login-container {
+        padding: 20px;
+        max-width: 90%;
+    }
+
+    .login-container input {
+        font-size: 16px;
+    }
+
+    .login-container button.btn {
+        font-size: 16px;
+    }
+
+    .login-container .login-title {
+        font-size: 20px;
+    }
+}
+/* Estilos para el contador del carrito */
+.floating-cart {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #28a745;
+    color: white;
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    text-decoration: none;
+    transition: transform 0.3s ease;
+}
+
+.floating-cart:hover {
+    transform: scale(1.1);
+}
+
+.floating-cart i {
+    font-size: 60px;
+}
+
+#cart-count {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: red;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 50%;
+    padding: 5px 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    animation: both; /* Animación por defecto */
+}
+/* Estilos responsivos para las tarjetas del carrusel */
+@media (max-width: 768px) {
+    .card {
+        width: 90%; /* Reduce el ancho de la tarjeta en dispositivos móviles */
+        margin: auto; /* Centra las tarjetas en pantallas pequeñas */
+        text-align: center;
+    }
+
+    .card-body {
+        padding: 10px; /* Reduce el padding interno */
+    }
+
+    .card-title {
+        font-size: 1.2rem; /* Reduce el tamaño del título */
+    }
+
+    .card-info {
+        font-size: 1rem; /* Ajusta el tamaño del texto de información */
+    }
+
+    .btn {
+        font-size: 0.9rem; /* Ajusta el tamaño de los botones */
+    }
+}
+@keyframes bounce {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+}
+.cookie-regular {
+    font-family: "Cookie", cursive;
+    font-weight: 400;
+    font-style: normal;
+    color: #ffffff;
+    font-size: 70px;
+  }
+/* Contenedor del botón flotante */
+.floating-add-product {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    z-index: 1000;
+    cursor: pointer;
+}
+
+/* Estilo de la "burbuja" circular */
+.floating-add-product .circle {
+    background: linear-gradient(135deg, #28a745, #218838); /* Efecto de degradado */
+    width: 105px;
+    height: 105px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.floating-add-product .circle:hover {
+    transform: scale(1.1); /* Aumenta el tamaño al hacer hover */
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.25);
+}
+
+/* Ícono del "+" */
+.floating-add-product .circle i {
+    font-size: 28px;
+    color: white;
+}
+
+/* Tooltip (Texto que aparece al pasar el mouse) */
+.floating-add-product .tooltip {
+    position: absolute;
+    right: 120px;
+    background-color: #218838;
+    color: white;
+    font-size: 14px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    opacity: 0;
+    transform: translateX(10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+.floating-add-product:hover .tooltip {
+    opacity: 1;
+    transform: translateX(0);
+}
+/* Contenedor del botón flotante (Agregar Retiro) */
+.floating-add-retiro {
+    position: fixed;
+    bottom: 100px; /* Ajusta la posición vertical para no superponerlo con otro botón */
+    right: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    z-index: 1000;
+    cursor: pointer;
+}
+
+/* Burbuja circular */
+.floating-add-retiro .circle {
+    background: linear-gradient(135deg, #28a745, #218838); /* Efecto de degradado */
+    width: 65px;
+    height: 65px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.floating-add-retiro .circle:hover {
+    transform: scale(1.1); /* Aumenta el tamaño al hacer hover */
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.25);
+}
+
+/* Ícono dentro del botón */
+.floating-add-retiro .circle i {
+    font-size: 28px;
+    color: white;
+}
+
+/* Tooltip (Texto que aparece al pasar el mouse) */
+.floating-add-retiro .tooltip {
+    position: absolute;
+    right: 80px;
+    background-color: #218838;
+    color: white;
+    font-size: 14px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    opacity: 0;
+    transform: translateX(10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    white-space: nowrap;
+    pointer-events: none;
+}
+
+.floating-add-retiro:hover .tooltip {
+    opacity: 1;
+    transform: translateX(0);
+}

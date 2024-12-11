@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}Vista de Cocina{% endblock %}
+
+{% block content %}
+<h2>Vista de Cocina</h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID Pedido</th>
+            <th>Fecha</th>
+            <th>Total</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for pedido in pedidos %}
+        <tr>
+            <td>{{ pedido['id'] }}</td>
+            <td>{{ pedido['fecha'] }}</td>
+            <td>{{ pedido['total'] }}</td>
+            <td>{{ pedido['estado'] }}</td>
+            <td>
+                <form action="{{ url_for('actualizar_estado_pedido') }}" method="POST" class="d-inline">
+                    <input type="hidden" name="id_pedido" value="{{ pedido['id'] }}">
+                    <button type="submit" name="nuevo_estado" value="En preparación" class="btn btn-primary btn-sm">En Preparación</button>
+                    <button type="submit" name="nuevo_estado" value="Terminado" class="btn btn-success btn-sm">Terminar</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

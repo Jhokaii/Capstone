@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boleta de Venta</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+        }
+        .boleta {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #ffffff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2, h3 {
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        .footer {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="boleta">
+        <h2>Comprobante de venta
+        <br>Método de Pago: {{ venta.metodo_pago }}
+        <br>El Rincon Del Goloso
+        </h2>
+
+        <p><strong>Fecha:</strong> {{ venta.fecha_pago }}
+        <br>Av. 5 de Abril 0406, Maipú, Región Metropolitana
+    </p>
+
+
+        <h1>Detalle de Pedido |
+           ID Pago: {{ venta.id_pago }}
+        </h1>
+
+
+
+        <h3>Productos</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Precio Unitario</th>
+                    <th>Valor Acumulado</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for producto in venta.productos %}
+                <tr>
+                    <td>{{ producto.nombre }}</td>
+                    <td>{{ producto.cantidad }}</td>
+                    <td>${{ producto.precio_unitario }}</td>
+                    <td>${{ producto.valor_acumulado }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <h3>Total: ${{ venta.monto_total }}</h3>
+        <p class="footer">Gracias por su compra.</p>
+    </div>
+</body>
+</html>

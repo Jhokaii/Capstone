@@ -1,0 +1,312 @@
+{% extends "base.html" %}
+
+{% block title %}Inventario - Administración de Productos{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="text-center" style="text-align: center; font-style: italic; font-family: 'Times New Roman', Times, serif; font-size: 50px; background-color: rgba(192, 211, 227, 0.575);">Inventario de Productos</h1>
+    <!-- Botón flotante con un diseño moderno -->
+    <a href="#" class="floating-add-product" data-bs-toggle="modal" data-bs-target="#crearProductoModal">
+        <div class="circle">
+            <i class="fas fa-plus-circle"></i>
+        </div>
+        <span class="tooltip">Agregar Producto</span>
+    </a>
+
+    <div class="table-responsive mt-4">
+        <table class="table table-striped table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>
+                        <a href="{{ url_for('inventario', order_by='id_producto', order_dir='asc' if order_dir == 'desc' or order_by != 'id_producto' else 'desc', page=page) }}" class="text-light">
+                            ID
+                            {% if order_by == 'id_producto' %}
+                                {{ '↑' if order_dir == 'asc' else '↓' }}
+                            {% endif %}
+                        </a>
+                    </th>
+                    <th>
+                        <a href="{{ url_for('inventario', order_by='nombre', order_dir='asc' if order_dir == 'desc' or order_by != 'nombre' else 'desc', page=page) }}" class="text-light">
+                            Nombre
+                            {% if order_by == 'nombre' %}
+                                {{ '↑' if order_dir == 'asc' else '↓' }}
+                            {% endif %}
+                        </a>
+                    </th>
+                    <th>
+                        <a href="{{ url_for('inventario', order_by='descripcion', order_dir='asc' if order_dir == 'desc' or order_by != 'descripcion' else 'desc', page=page) }}" class="text-light">
+                            Descripción (Opcional)
+                            {% if order_by == 'descripcion' %}
+                                {{ '↑' if order_dir == 'asc' else '↓' }}
+                            {% endif %}
+                        </a>
+                    </th>
+                    <th>
+                        <a href="{{ url_for('inventario', order_by='precio', order_dir='asc' if order_dir == 'desc' or order_by != 'precio' else 'desc', page=page) }}" class="text-light">
+                            Precio
+                            {% if order_by == 'precio' %}
+                                {{ '↑' if order_dir == 'asc' else '↓' }}
+                            {% endif %}
+                        </a>
+                    </th>
+                    <th>
+                        <a href="{{ url_for('inventario', order_by='stock', order_dir='asc' if order_dir == 'desc' or order_by != 'stock' else 'desc', page=page) }}" class="text-light">
+                            Stock
+                            {% if order_by == 'stock' %}
+                                {{ '↑' if order_dir == 'asc' else '↓' }}
+                            {% endif %}
+                        </a>
+                    </th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for producto in productos %}
+                <tr>
+                    <td>{{ producto.id_producto }}</td>
+                    <td>{{ producto.nombre }}</td>
+                    <td>{{ producto.descripcion }}</td>
+                    <td>${{ producto.precio | clp }}</td>
+                    <td>{{ producto.stock }}</td>
+                    <td>
+                        <!-- Botón Actualizar -->
+                    <button class="btn btn-warning btn-sm"
+                            data-id="{{ producto.id_producto }}"
+                            data-nombre="{{ producto.nombre }}"
+                            data-descripcion="{{ producto.descripcion }}"
+                            data-precio="{{ producto.precio }}"
+                            data-stock="{{ producto.stock }}"
+                            data-bs-toggle="modal"
+                            data-bs-target="#actualizarProductoModal">
+                        Actualizar
+                    </button>
+
+    
+                        <!-- Botón Eliminar -->
+                        <button class="btn btn-danger btn-sm eliminar-producto-btn"
+                                data-id="{{ producto.id_producto }}">
+                            <i class="fas fa-trash-alt"></i> Eliminar
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+<!-- Paginación -->
+<nav aria-label="Page navigation" class="mt-4 d-none d-md-block">
+    <ul class="pagination justify-content-center">
+        {% if page > 1 %}
+        <li class="page-item">
+            <a class="page-link" href="{{ url_for('inventario', page=page-1, order_by=order_by, order_dir=order_dir) }}" aria-label="Anterior">
+                &laquo;
+            </a>
+        </li>
+        {% endif %}
+
+        {% for p in range(1, total_paginas + 1) %}
+        <li class="page-item {% if p == page %}active{% endif %}">
+            <a class="page-link" href="{{ url_for('inventario', page=p, order_by=order_by, order_dir=order_dir) }}">{{ p }}</a>
+        </li>
+        {% endfor %}
+
+        {% if page < total_paginas %}
+        <li class="page-item">
+            <a class="page-link" href="{{ url_for('inventario', page=page+1, order_by=order_by, order_dir=order_dir) }}" aria-label="Siguiente">
+                &raquo;
+            </a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+
+</div>
+<!-- Modal for creating a product -->
+<div class="modal fade" id="crearProductoModal" tabindex="-1" aria-labelledby="crearProductoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="crearProductoModalLabel">Agregar Nuevo Producto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="crearProductoForm">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="nombreProducto" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="nombreProducto" name="nombre" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="descripcionProducto" class="form-label">Descripción (Opcional)</label>
+                        <textarea class="form-control" id="descripcionProducto" name="descripcion" rows="2"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="precioProducto" class="form-label">Precio (CLP)</label>
+                        <input 
+                            type="number" 
+                            class="form-control" 
+                            id="precioProducto" 
+                            name="precio" 
+                            min="1" 
+                            step="1" 
+                            required 
+                            placeholder="Ingrese precio">
+                    </div>
+                    <div class="mb-3">
+                        <label for="stockProducto" class="form-label">Stock</label>
+                        <input 
+                            type="number" 
+                            class="form-control" 
+                            id="stockProducto" 
+                            name="stock" 
+                            min="0" 
+                            step="1" 
+                            required 
+                            placeholder="Ingrese la cantidad de stock">
+                    </div>
+                    <div class="mb-3">
+                        <label for="tipoProducto" class="form-label">Tipo de Producto</label>
+                        <select class="form-select" id="tipoProducto" name="tipo" disabled>
+                            <option value="producto" selected>Producto</option>
+                            <option value="promocion">Promoción</option>
+                        </select>
+                    </div>
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-success">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Modal for updating a product -->
+<div class="modal fade" id="actualizarProductoModal" tabindex="-1" aria-labelledby="actualizarProductoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="actualizarProductoModalLabel">Actualizar Producto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="POST" action="/actualizar_producto">
+                <div class="modal-body">
+                    <input type="hidden" id="id_producto" name="id_producto">
+                    <div class="mb-3">
+                        <label for="nombre" class="form-label">Nombre del Producto</label>
+                        <input type="text" class="form-control" id="nombre" name="nombre" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="descripcion" class="form-label">Descripción</label>
+                        <textarea class="form-control" id="descripcion" name="descripcion" ></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="precio" class="form-label">Precio</label>
+                        <input type="number" class="form-control" id="precio" name="precio" min="1" step="1" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="stock" class="form-label">Stock</label>
+                        <input type="number" class="form-control" id="stock" name="stock" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('crearProductoForm').addEventListener('submit', function (e) {
+            e.preventDefault(); // Prevenir el comportamiento por defecto del formulario
+
+            const nombre = document.getElementById('nombreProducto').value;
+            const descripcion = document.getElementById('descripcionProducto').value;
+            const precio = parseFloat(document.getElementById('precioProducto').value);
+            const stock = parseInt(document.getElementById('stockProducto').value);
+            const tipo = document.getElementById('tipoProducto').value;
+
+            // Validar los datos antes de enviarlos
+            if (!nombre || precio <= 0 || stock < 0) {
+                alert("Por favor, ingresa valores válidos para el producto.");
+                return;
+            }
+
+            // Realizar la solicitud AJAX
+            fetch('/crear_producto', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ nombre, descripcion, precio, stock, tipo })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.message) {
+                        alert(data.message); // Mostrar el mensaje del servidor
+                    }
+                    location.reload(); // Recargar la página para actualizar la lista de productos
+                })
+                .catch(error => {
+                    console.error("Error al agregar producto:", error);
+                    alert("Hubo un error al agregar el producto. Intenta de nuevo.");
+                });
+        });
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const botonesEliminar = document.querySelectorAll('.eliminar-producto-btn');
+
+        botonesEliminar.forEach(boton => {
+            boton.addEventListener('click', function () {
+                const productoId = this.getAttribute('data-id');
+
+                if (confirm('¿Estás seguro de que deseas eliminar este producto?')) {
+                    fetch('/eliminar_producto', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ id_producto: productoId })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.message) {
+                            alert(data.message);
+                        }
+
+                        // Recargar la página o eliminar el producto del DOM
+                        location.reload();
+                    })
+                    .catch(error => {
+                        console.error('Error al eliminar el producto:', error);
+                        alert('Ocurrió un error al eliminar el producto.');
+                    });
+                }
+            });
+        });
+    });
+</script>
+
+<script>
+    // Manejar la apertura del modal para actualizar el producto
+    document.getElementById('actualizarProductoModal').addEventListener('show.bs.modal', function (event) {
+        const button = event.relatedTarget; // Botón que activó el modal
+        const id = button.getAttribute('data-id');
+        const nombre = button.getAttribute('data-nombre');
+        const descripcion = button.getAttribute('data-descripcion');
+        const precio = button.getAttribute('data-precio');
+        const stock = button.getAttribute('data-stock');
+
+        // Actualizar los campos del modal con los valores
+        document.getElementById('id_producto').value = id;
+        document.getElementById('nombre').value = nombre;
+        document.getElementById('descripcion').value = descripcion || '';
+        document.getElementById('precio').value = precio;
+        document.getElementById('stock').value = stock;
+    });
+
+</script>
+
+{% endblock %}
