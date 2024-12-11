@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Promociones{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="text-center">Promociones</h1>
+
+    <div class="row">
+        {% for promocion in promociones %}
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ promocion[1] }}</h5>
+                    <p class="card-text">Productos: {{ promocion[2] }}</p>
+                    <p class="card-text text-success"><strong>Precio: ${{ promocion[3] }}</strong></p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

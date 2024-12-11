@@ -44,10 +44,21 @@
 </head>
 <body>
     <div class="boleta">
-        <h1>Boleta de Venta</h1>
-        <h2>ID Pago: {{ venta.id_pago }}</h2>
-        <p><strong>Fecha:</strong> {{ venta.fecha_pago }}</p>
-        <p><strong>Método de Pago:</strong> {{ venta.metodo_pago }}</p>
+        <h2>Comprobante de venta
+        <br>Método de Pago: {{ venta.metodo_pago }}
+        <br>El Rincon Del Goloso
+        </h2>
+
+        <p><strong>Fecha:</strong> {{ venta.fecha_pago }}
+        <br>Av. 5 de Abril 0406, Maipú, Región Metropolitana
+    </p>
+
+
+        <h1>Detalle de Pedido |
+           ID Pago: {{ venta.id_pago }}
+        </h1>
+
+
 
         <h3>Productos</h3>
         <table>

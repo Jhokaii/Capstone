@@ -4,89 +4,114 @@
 
 {% block content %}
 <div class="container mt-4">
-    <h1 style="text-align: center; font-style: oblique; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">Menú de Productos</h1>
+    <!-- Ícono del carrito flotante -->
+    <a href="{{ url_for('ver_carrito') }}" class="floating-cart">
+        <i class="fas fa-shopping-cart"></i>
+        <span id="cart-count">0</span>
+    </a>
 
-    <!-- Botón para ver el carrito -->
-    <div class="d-flex justify-content-end mb-4">
-        <a href="{{ url_for('ver_carrito') }}" class="btn btn-success">Ver Carrito</a>
-    </div>
-
-    <!-- Carrusel -->
-    <div id="menuCarousel" class="carousel slide" data-bs-ride="carousel">
-        <div class="carousel-inner">
-            {% for producto in productos %}
-            <div class="carousel-item {% if loop.first %}active{% endif %}">
-                <div class="d-flex justify-content-center">
-                    <!-- Tarjeta del producto -->
-                    <div class="card" style="width: 24rem; height: 8cm;">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ producto.nombre }}</h5>
-                            <p class="card-text">{{ producto.descripcion }}</p>
-                            <p class="card-text">Precio: ${{ producto.precio }}</p>
-                            <p class="card-text">Stock Disponible: {{ producto.stock }}</p>
-                            
-                            {% if producto.stock > 0 %}
-                            <!-- Botón de agregar al carrito -->
-                            <button 
-                                class="btn btn-primary agregar-carrito-btn" 
-                                data-id="{{ producto.id_producto }}" 
-                                data-nombre="{{ producto.nombre }}" 
-                                data-precio="{{ producto.precio }}">
-                                Agregar al Carrito
-                            </button>
-                            {% else %}
-                            <button class="btn btn-secondary" disabled>Sin Stock</button>
-                            {% endif %}
-                        </div>
-                    </div>
+    <!-- Sección de Promociones -->
+    <h2 class="mt-4 text-center" style="font-style: italic; font-family: 'Times New Roman', Times, serif; font-size: 50px; background-color: rgba(192, 211, 227, 0.575);">Promociones</h2>
+    <br>
+    <div class="row">
+        {% for promocion in promociones %}
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-body position-relative">
+                    <h5 class="card-title">{{ promocion.nombre }}</h5>
+                    <p class="card-text text-success"><strong>{{ promocion.precio | format_clp }}</strong></p>
+                    <button 
+                        class="btn btn-primary agregar-carrito-btn" 
+                        data-promocion-id="{{ promocion.id }}" 
+                        data-nombre="{{ promocion.nombre }}" 
+                        data-precio="{{ promocion.precio }}">
+                        Agregar al Carrito
+                    </button>
+                    <br><br>
+                    <form method="POST" action="{{ url_for('eliminar_promocion', id=promocion.id) }}">
+                        <button type="submit" class="btn btn-danger btn-sm" style="background-color: red;">Eliminar</button>
+                    </form>
                 </div>
             </div>
-            {% endfor %}
         </div>
+        {% endfor %}
+    </div>
 
-        <!-- Controles del carrusel -->
-        <button class="carousel-control-prev" type="button" data-bs-target="#menuCarousel" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Anterior</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#menuCarousel" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Siguiente</span>
-        </button>
+    <!-- Sección de Productos -->
+    <h2 class="mt-5 text-center" style="font-style: italic; font-family: 'Times New Roman', Times, serif; font-size: 50px; background-color: rgba(192, 211, 227, 0.575);">Menú</h2>
+    <br>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        {% for producto in productos %}
+        <div class="col">
+            <div class="card h-100">
+                <div class="card-body position-relative">
+                    <!-- Mostrar el ID del producto en la esquina superior derecha -->
+                    <span class="position-absolute top-0 end-0 badge bg-secondary p-2" style="font-size: 0.8em;">ID: {{ producto.id_producto }}</span>
+                    <h5 class="card-title">{{ producto.nombre }}</h5>
+                    <p class="card-text">{{ producto.descripcion or 'Sin descripción' }}</p>
+                    <p class="card-text text-success"><strong>{{ producto.precio | format_clp }}</strong></p>
+                    {% if producto.stock > 0 %}
+                    <button 
+                        class="btn btn-primary agregar-carrito-btn" 
+                        data-id="{{ producto.id_producto }}" 
+                        data-nombre="{{ producto.nombre }}" 
+                        data-precio="{{ producto.precio }}">
+                        Agregar al Carrito
+                    </button>
+                    {% else %}
+                    <button class="btn btn-secondary" disabled>Sin Stock</button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
     </div>
 </div>
 
-<!-- Script para manejar AJAX -->
 <script>
+// JavaScript para el manejo del carrito
 document.addEventListener('DOMContentLoaded', function () {
-    // Seleccionar todos los botones de agregar al carrito
     const botones = document.querySelectorAll('.agregar-carrito-btn');
+    const cartCount = document.getElementById('cart-count');
 
-    // Agregar evento de clic a cada botón
+    // Obtener el valor inicial del contador del carrito
+    fetch('{{ url_for("obtener_carrito_total") }}')
+        .then(response => response.json())
+        .then(data => {
+            if (data.total_items) {
+                cartCount.textContent = data.total_items;
+            }
+        });
+
     botones.forEach(boton => {
         boton.addEventListener('click', function () {
-            const productoId = boton.dataset.id;
+            const promocionId = boton.dataset.promocionId || null; // ID de la promoción si aplica
+            const productoId = boton.dataset.id || null; // ID del producto si aplica
             const nombre = boton.dataset.nombre;
             const precio = boton.dataset.precio;
 
-            // Realizar la solicitud AJAX
-            fetch('{{ url_for("agregar_al_carrito_ajax") }}', {
+            const url = promocionId 
+                ? '{{ url_for("agregar_promocion_carrito") }}' 
+                : '{{ url_for("agregar_al_carrito_ajax") }}';
+
+            const body = promocionId 
+                ? { promocion_id: promocionId }
+                : { producto_id: productoId, nombre: nombre, precio: precio };
+
+            fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({
-                    producto_id: productoId,
-                    nombre: nombre,
-                    precio: precio
-                })
+                body: JSON.stringify(body)
             })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    alert(data.message); // Mostrar mensaje de éxito
+                    cartCount.textContent = parseInt(cartCount.textContent) + 1;
+                    alert(data.message);
                 } else {
-                    alert(data.message); // Mostrar mensaje de error
+                    alert(data.message);
                 }
             })
             .catch(error => {

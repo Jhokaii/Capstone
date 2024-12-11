@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Vista del Chef{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="text-center"  style="text-align: center; font-style: italic; font-family: 'Times New Roman', Times, serif; font-size: 50px; background-color: rgba(192, 211, 227, 0.575);">Vista del Chef</h1>
+    
+    {% if pedidos %}
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered text-center">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for pedido in pedidos %}
+                <tr>
+                    <td>{{ pedido.producto }}</td>
+                    <td>{{ pedido.cantidad }}</td>
+                    <td>
+                        <form action="{{ url_for('marcar_pedido_listo', id_pago=pedido.id_pago, id_producto=pedido.id_producto) }}" method="post">
+                            <button type="submit" class="btn btn-success">Marcar Listo</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}                
+            </tbody>
+        </table>
+        
+    </div>
+    {% else %}
+    <p class="text-center" style="font-size: 25px; font-style: italic; font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;">No hay pedidos pendientes.</p>
+    {% endif %}
+</div>
+{% endblock %}

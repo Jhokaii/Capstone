@@ -5,18 +5,19 @@
 {% block content %}
 <div class="d-flex justify-content-center align-items-center vh-100">
     <div class="login-container">
-        <h2 class="login-title">Iniciar Sesión</h2>
+        <h2 class="cookie-regular" >Iniciar Sesión</h2>
 
-        <!-- Mostrar mensajes de alerta -->
         {% with messages = get_flashed_messages(with_categories=True) %}
-            {% if messages %}
-                <div id="alert-container">
-                    {% for category, message in messages %}
-                        <div class="alert {{ category }}">{{ message }}</div>
-                    {% endfor %}
-                </div>
-            {% endif %}
-        {% endwith %}
+        {% if messages %}
+          <div class="alert-container">
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }}" role="alert">
+                {{ message }}
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
         
         <!-- Formulario de inicio de sesión -->
         <form id="loginForm" action="{{ url_for('login') }}" method="POST" onsubmit="return validateLoginForm()">

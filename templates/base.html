@@ -4,11 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Mi Proyecto{% endblock %}</title>
+    
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
-
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cookie&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'><text y='32' font-size='32'>🍔</text></svg>">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         /* Estilos de alerta */
         .alert {
@@ -23,74 +27,109 @@
         }
         .alert.success { background-color: #4CAF50; } /* Éxito */
         .alert.error { background-color: #f44336; }   /* Error */
-    
-        /* Estilos de navbar */
-        nav {
+        .nav {
             background-color: #333;
             padding: 10px;
-            position: fixed; /* Fija el navbar */
+            position: fixed;
             top: 0;
             left: 0;
-            width: 100%; /* Asegura que ocupe todo el ancho */
-            z-index: 1000; /* Siempre encima del contenido */
+            width: 100%;
+            z-index: 1000;
         }
-    
-        nav ul {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
+        /* Estilos de navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1030;
         }
-    
-        nav ul li {
-            float: left;
+        body {
+            padding-top: 60px; /* Ajustar este valor según la altura del navbar */
         }
-    
-        nav ul li a {
-            display: block;
-            color: white;
-            text-align: center;
-            padding: 14px 16px;
-            text-decoration: none;
+        .navbar-collapse.show {
+            background-color: #333; /* Fondo oscuro para el menú desplegable */
         }
-    
-        nav ul li a:hover {
-            background-color: #555;
+        .navbar-nav .nav-link.active {
+            font-weight: bold;
+            color: #FFD700 !important; /* Cambiar color de enlace activo */
         }
-    
-        /* Contenido principal ajustado para no superponerse al navbar */
+
+        /* Ajuste de contenido */
         .content {
-            margin-top: 60px; /* Ajusta este valor según la altura del navbar */
+            margin-top: 20px;
             padding: 20px;
         }
     </style>
-    
 </head>
 <body>
 
-    <!-- Navbar: Solo se muestra si show_navbar es True -->
+    <!-- Navbar -->
     {% if show_navbar is defined and show_navbar %}
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <a class="navbar-brand" href="{{ url_for('home') }}">
+                <i class="fas fa-utensils"></i> El rincon del goloso
+            </a>
+            <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarNav"
+                aria-controls="navbarNav"
+                aria-expanded="false"
+                aria-label="Toggle navigation"
+            >
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" href="{{ url_for('home') }}">Inicio</a>
+                        <a class="nav-link {% if request.endpoint == 'home' %}active{% endif %}" href="{{ url_for('home') }}">
+                            <i class="fas fa-home"></i> Inicio
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('menu') }}">Menú</a>
+                        <a class="nav-link {% if request.endpoint == 'menu' %}active{% endif %}" href="{{ url_for('menu') }}">
+                            <i class="fas fa-utensils"></i> Menú
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('listar_boletas') }}">Boletas</a>
+                        <a class="nav-link {% if request.endpoint == 'listar_boletas' %}active{% endif %}" href="{{ url_for('listar_boletas') }}">
+                            <i class="fas fa-receipt"></i> Boletas
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('crear_producto') }}">Crear Productos</a>
+                        <a class="nav-link {% if request.endpoint == 'vista_chef' %}active{% endif %}" href="{{ url_for('vista_chef') }}">
+                            <i class="fas fa-receipt"></i> Cocina
+                        </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('ver_usuarios') }}">Ver usuarios</a>
+                        <a class="nav-link {% if request.endpoint == 'inventario' %}active{% endif %}" href="{{ url_for('inventario') }}">
+                            <i class="fas fa-box"></i> Inventario
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'ver_usuarios' %}active{% endif %}" href="{{ url_for('ver_usuarios') }}">
+                            <i class="fas fa-users"></i> Usuarios
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'crear_promocion' %}active{% endif %}" href="{{ url_for('crear_promocion') }}">
+                            <i class="fas fa-plus-circle"></i> Crear Promoción
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'analisis_ventas' %}active{% endif %}" href="{{ url_for('analisis_ventas') }}">
+                            <i class="fas fa-chart-bar"></i> Grafico Ventas
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a 
+                            class="nav-link text-danger" 
+                            href="{{ url_for('logout') }}" 
+                            onclick="return confirm('¿Estás seguro de que deseas cerrar sesión?')">
+                            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                        </a>
                     </li>
                 </ul>
             </div>
@@ -105,16 +144,16 @@
 
     <!-- Bloque para mostrar las alertas flotantes -->
     {% with messages = get_flashed_messages(with_categories=True) %}
-      {% if messages %}
-        <div id="alert-container">
-          {% for category, message in messages %}
-            <div class="alert {{ category }}">{{ message }}</div>
-          {% endfor %}
-        </div>
-      {% endif %}
+        {% if messages %}
+            <div id="alert-container">
+                {% for category, message in messages %}
+                    <div class="alert {{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
     {% endwith %}
 
-    <!-- JavaScript para ocultar las alertas después de 5 segundos -->
+    <!-- JavaScript para ocultar las alertas después de 1 segundos -->
     <script>
         setTimeout(function() {
             var alerts = document.querySelectorAll('.alert');
@@ -122,9 +161,37 @@
                 alert.style.display = 'none';
             });
         }, 5000);
+
+        // Cerrar menú al hacer clic en un enlace
+        document.querySelectorAll('.nav-link').forEach(item => {
+            item.addEventListener('click', () => {
+                const navCollapse = document.querySelector('.navbar-collapse');
+                if (navCollapse.classList.contains('show')) {
+                    navCollapse.classList.remove('show');
+                }
+            });
+        });
     </script>
+    <script>
+        function actualizarReloj() {
+            const reloj = document.getElementById('reloj');
+            if (reloj) {
+                const ahora = new Date();
+                const horas = String(ahora.getHours()).padStart(2, '0');
+                const minutos = String(ahora.getMinutes()).padStart(2, '0');
+                const segundos = String(ahora.getSeconds()).padStart(2, '0');
+                const horaCompleta = `${horas}:${minutos}:${segundos}`;
+                reloj.textContent = horaCompleta;
+            }
+        }
+
+        // Actualizar el reloj cada segundo
+        setInterval(actualizarReloj, 1000);
+        // Inicializar el reloj
+        actualizarReloj();
+    </script>
+
     <!-- Bootstrap Bundle JS (incluye Popper.js) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
-
 </body>
 </html>
