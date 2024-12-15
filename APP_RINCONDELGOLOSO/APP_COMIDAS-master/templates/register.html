@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block title %}Registro{% endblock %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
+    <div class="card p-4 shadow" style="width: 100%; max-width: 400px; background-color: #8c5b56; color: white; border-radius: 15px;">
+        <h2 class="text-center mb-4" style="font-family: 'cookies', sans-serif;">Registrarse</h2>
+        <form id="registerForm" method="POST" action="{{ url_for('register') }}">
+            <div class="mb-3">
+                <label for="usuario" class="form-label">Usuario</label>
+                <input type="text" class="form-control" id="usuario" name="usuario" placeholder="Ingresa tu usuario" required>
+                <div class="text-danger" id="usuarioError" style="display: none;">Este campo es obligatorio.</div>
+            </div>
+            <div class="mb-3">
+                <label for="contrasena" class="form-label">Contraseña</label>
+                <input type="password" class="form-control" id="contrasena" name="contrasena" placeholder="Ingresa tu contraseña" required>
+                <div class="text-danger" id="contrasenaError" style="display: none;">Debe tener al menos 6 caracteres.</div>
+            </div>
+            <div class="mb-3">
+                <label for="confirmPassword" class="form-label">Confirmar Contraseña</label>
+                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Confirma tu contraseña" required>
+                <div class="text-danger" id="confirmPasswordError" style="display: none;">Las contraseñas no coinciden.</div>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Registrar</button>
+        </form>
+        <p class="text-center mt-3">
+            ¿Ya tienes una cuenta? 
+            <a href="{{ url_for('login') }}" style="color: #ffcccb;">Inicia sesión</a>
+        </p>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const usuarioInput = document.getElementById('usuario');
+    const contrasenaInput = document.getElementById('contrasena');
+    const confirmPasswordInput = document.getElementById('confirmPassword');
+
+    const usuarioError = document.getElementById('usuarioError');
+    const contrasenaError = document.getElementById('contrasenaError');
+    const confirmPasswordError = document.getElementById('confirmPasswordError');
+
+    function showError(input, errorElement, message) {
+        errorElement.textContent = message;
+        errorElement.style.display = 'block';
+        input.classList.add('is-invalid');
+    }
+
+    function hideError(input, errorElement) {
+        errorElement.style.display = 'none';
+        input.classList.remove('is-invalid');
+    }
+
+    usuarioInput.addEventListener('input', function () {
+        if (usuarioInput.value.trim() === '') {
+            showError(usuarioInput, usuarioError, 'Este campo es obligatorio.');
+        } else {
+            hideError(usuarioInput, usuarioError);
+        }
+    });
+
+    contrasenaInput.addEventListener('input', function () {
+        if (contrasenaInput.value.length < 6) {
+            showError(contrasenaInput, contrasenaError, 'Debe tener al menos 6 caracteres.');
+        } else {
+            hideError(contrasenaInput, contrasenaError);
+        }
+    });
+
+    confirmPasswordInput.addEventListener('input', function () {
+        if (confirmPasswordInput.value !== contrasenaInput.value) {
+            showError(confirmPasswordInput, confirmPasswordError, 'Las contraseñas no coinciden.');
+        } else {
+            hideError(confirmPasswordInput, confirmPasswordError);
+        }
+    });
+
+    const form = document.getElementById('registerForm');
+    form.addEventListener('submit', function (e) {
+        let valid = true;
+
+        if (usuarioInput.value.trim() === '') {
+            showError(usuarioInput, usuarioError, 'Este campo es obligatorio.');
+            valid = false;
+        }
+
+        if (contrasenaInput.value.length < 6) {
+            showError(contrasenaInput, contrasenaError, 'Debe tener al menos 6 caracteres.');
+            valid = false;
+        }
+
+        if (confirmPasswordInput.value !== contrasenaInput.value) {
+            showError(confirmPasswordInput, confirmPasswordError, 'Las contraseñas no coinciden.');
+            valid = false;
+        }
+
+        if (!valid) {
+            e.preventDefault();
+        }
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block title %}Inicio - El Rincón del Goloso{% endblock %}
+
+{% block content %}
+<div class="home-container">
+    <div class="text-center">
+        <h1 class="cookie-regular" style="text-align: center; font-style: italic; font-family: 'Times New Roman', Times, serif; font-size: 50px; background-color: rgba(30, 116, 186, 0.87);">Bienvenido a El Rincón del Goloso</h1>
+        <p class="welcome-text">Explora nuestro delicioso menú y realiza tu pedido.</p>
+    </div>
+
+    <!-- Botón centrado para realizar un pedido -->
+    <div class="center-button">
+        <button class="btn btn-success btn-lg" onclick="window.location.href='{{ url_for('menu') }}'">
+            REALIZAR PEDIDO
+        </button>
+    </div>
+</div>
+{% endblock %}

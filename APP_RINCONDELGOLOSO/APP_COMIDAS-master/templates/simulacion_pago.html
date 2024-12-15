@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Simulación de Pago{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="card p-4" style="max-width: 500px; width: 100%; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+        <h2 class="text-center">Simulación de Pago</h2>
+        <p class="text-center">Total a pagar: <strong>${{ total }}</strong></p>
+        <form method="POST" action="{{ url_for('simulacion_pago') }}">
+            <div class="mb-3">
+                <label for="metodo_pago" class="form-label">Método de Pago:</label>
+                <select id="metodo_pago" name="metodo_pago" class="form-select" required>
+                    <option value="Efectivo">Efectivo</option>
+                    <option value="Transferencia">Transferencia</option>
+                </select>
+            </div>
+            <a href="{{ url_for('menu') }}" class="btn btn-success">Volver al menú</a>
+            <a href="{{ url_for('ver_carrito') }}" class="btn btn-warning">Volver al carrito</a>
+
+            <button type="submit" class="btn btn-primary w-100">Realizar Pago</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

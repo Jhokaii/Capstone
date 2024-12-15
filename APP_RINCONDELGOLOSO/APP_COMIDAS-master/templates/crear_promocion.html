@@ -1,0 +1,128 @@
+{% extends "base.html" %}
+
+{% block title %}Crear Promoción{% endblock %}
+
+{% block content %}
+<div class="container mt-4 p-4" style="background-color: #f8f9fab3; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+    <h1 class="text-center mb-4" style="color: #343a40;">Crear Promoción</h1>
+
+    <!-- Formulario para crear promoción -->
+    <form id="formPromocion">
+        <div class="row">
+            <!-- Selección de productos -->
+            <div class="col-md-6">
+                <h4 style="color: #495057;">Selecciona los productos:</h4>
+                <hr>
+                <div class="form-check" style="font-size: 16px;">
+                    {% for producto in productos %}
+                    <div class="mb-2">
+                        <input
+                            class="form-check-input"
+                            type="checkbox"
+                            value="{{ producto[0] }}"
+                            id="producto{{ producto[0] }}"
+                            name="productos"
+                        >
+                        <label class="form-check-label" for="producto{{ producto[0] }}">
+                            {{ producto[1] }} - ${{ producto[2] }}
+                        </label>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Información de precios -->
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <h4 style="color: #495057;">Total:</h4>
+                    <hr>
+                    <p id="totalPrecio" class="fs-4 text-success">$0</p>
+                </div>
+                <div class="mb-3">
+                    <label for="precioPromocional" class="form-label">Precio Promocional</label>
+                    <input
+                        type="number"
+                        class="form-control"
+                        id="precioPromocional"
+                        name="precioPromocional"
+                        step="0.01"
+                        placeholder="Ingresa un precio promocional"
+                    >
+                </div>
+            </div>
+        </div>
+
+        <!-- Mensaje de error -->
+        <div id="error-message" class="text-danger mb-3"></div>
+
+        <!-- Botón Guardar -->
+        <div class="text-center">
+            <button type="submit" class="btn btn-success btn-lg">
+                Guardar Promoción
+            </button>
+        </div>
+    </form>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const checkboxes = document.querySelectorAll('input[name="productos"]');
+    const totalPrecio = document.getElementById('totalPrecio');
+    const errorMessage = document.getElementById('error-message');
+
+    // Actualizar el precio total cuando se seleccionan productos
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function () {
+            let total = 0;
+            checkboxes.forEach(box => {
+                if (box.checked) {
+                    const precio = parseFloat(box.nextElementSibling.textContent.split('$')[1]);
+                    total += precio;
+                }
+            });
+            totalPrecio.textContent = formatCLP(total); // Aplicar formato CLP al total
+        });
+    });
+
+    // Enviar el formulario
+    document.getElementById('formPromocion').addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const productos = Array.from(checkboxes)
+            .filter(checkbox => checkbox.checked)
+            .map(checkbox => checkbox.value);
+
+        const precioPromocional = document.getElementById('precioPromocional').value;
+
+        fetch('/guardar_promocion', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                productos: productos,
+                precio_promocional: precioPromocional
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(data.message);
+                location.reload();
+            } else {
+                errorMessage.textContent = data.message;
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            errorMessage.textContent = 'Error al crear la promoción.';
+        });
+    });
+});
+
+function formatCLP(value) {
+    return new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP' }).format(value);
+}
+
+</script>
+{% endblock %}

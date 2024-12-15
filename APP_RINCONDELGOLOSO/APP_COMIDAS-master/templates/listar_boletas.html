@@ -1,0 +1,261 @@
+{% extends "base.html" %}
+
+{% block title %}Listado de Boletas{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="text-center" style="text-align: center; font-style: italic; font-family: 'Times New Roman', Times, serif; font-size: 50px; background-color: rgba(192, 211, 227, 0.575);">Listado de Boletas</h1>
+    <br>
+
+    <!-- Formulario de búsqueda -->
+    <form method="GET" action="{{ url_for('listar_boletas') }}" class="mb-4">
+        <div class="row">
+            <!-- Campo de búsqueda por ID -->
+            <div class="col-md-4">
+                <label for="id_pago" class="form-label">Buscar por ID</label>
+                <input type="text" id="id_pago" name="id_pago" class="form-control" placeholder="Ingrese ID de Pago">
+            </div>
+            <!-- Campo de búsqueda por fecha -->
+            <div class="col-md-4">
+                <label for="fecha" class="form-label">Buscar por Fecha</label>
+                <input type="date" id="fecha" name="fecha" class="form-control">
+            </div>
+            <!-- Botón de búsqueda -->
+            <div class="col-md-4 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary w-100">Buscar</button>
+            </div>
+        </div>
+    </form>
+
+    <!-- Información de resultados -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <p class="mb-0">
+            Resultados: <strong>{{ total_boletas }}</strong>
+            {% if total_boletas > 0 %}
+            | Página <strong>{{ page }}</strong> de <strong>{{ total_paginas }}</strong>
+            {% endif %}
+        </p>
+    </div>
+
+    <!-- Tabla de Boletas -->
+    <div class="table-responsive">
+        <table class="table table-striped table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID Pago</th>
+                    <th>Fecha</th>
+                    <th>Monto Total</th>
+                    <th>Método de Pago</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for boleta in boletas %}
+                <tr>
+                    <td>{{ boleta.id_pago }}</td>
+                    <td>{{ boleta.fecha_pago }}</td>
+                    <td>${{ boleta.monto_total | clp }}</td>
+                    <td>{{ boleta.metodo_pago }}</td>
+                    <td>
+                        <a href="{{ url_for('boleta_pdf', id_pago=boleta.id_pago) }}" class="btn btn-primary btn-sm" target="_blank">
+                            <i class="fas fa-file-pdf"></i> Ver PDF
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Paginación de Boletas -->
+    <nav aria-label="Paginación de Boletas" class="mt-4">
+        <ul class="pagination justify-content-center">
+            <!-- Botón Anterior -->
+            {% if page > 1 %}
+            <li class="page-item">
+                <a class="page-link" href="{{ url_for('listar_boletas', page=page-1) }}" aria-label="Anterior">&laquo;</a>
+            </li>
+            {% endif %}
+
+            <!-- Números de Página -->
+            {% for p in range(1, total_paginas + 1) %}
+            <li class="page-item {% if p == page %}active{% endif %}">
+                <a class="page-link" href="{{ url_for('listar_boletas', page=p) }}">{{ p }}</a>
+            </li>
+            {% endfor %}
+
+            <!-- Botón Siguiente -->
+            {% if page < total_paginas %}
+            <li class="page-item">
+                <a class="page-link" href="{{ url_for('listar_boletas', page=page+1) }}" aria-label="Siguiente">&raquo;</a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <h2 class="text-center my-4" style="text-align: center; font-style: italic; font-family: 'Times New Roman', Times, serif; font-size: 50px; background-color: rgba(192, 211, 227, 0.575);">Retiros</h2>
+    <div class="table-responsive">
+        <table class="table table-striped table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Fecha</th>
+                    <th>Monto</th>
+                    <th>Método de Pago</th>
+                    <th>Descripción</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for retiro in retiros %}
+                <tr>
+                    <td>{{ retiro.id }}</td>
+                    <td>{{ retiro.fecha }}</td>
+                    <td>{{ retiro.monto | format_clp }}</td>
+                    <td>{{ retiro.metodo_pago }}</td>
+                    <td>{{ retiro.descripcion }}</td>
+                    <td>
+                        <!-- Botón para abrir el modal de modificar -->
+                        <button 
+                            class="btn btn-warning btn-sm" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#modalModificarRetiro" 
+                            data-id="{{ retiro.id }}" 
+                            data-monto="{{ retiro.monto }}" 
+                            data-metodo-pago="{{ retiro.metodo_pago }}" 
+                            data-descripcion="{{ retiro.descripcion }}">
+                            Modificar
+                        </button>
+                        <!-- Botón para eliminar -->
+                        <form action="{{ url_for('eliminar_retiro', id=retiro.id) }}" method="post" style="display:inline;">
+                            <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <!-- Botón flotante con diseño moderno para agregar retiro -->
+    <a href="#" class="floating-add-retiro" data-bs-toggle="modal" data-bs-target="#modalAgregarRetiro">
+        <div class="circle">
+            <i class="fas fa-plus-circle"></i>
+        </div>
+        <span class="tooltip">Agregar Retiro</span>
+    </a>
+        <!-- Paginación de Retiros -->
+        <nav aria-label="Paginación de Retiros" class="mt-4">
+            <ul class="pagination justify-content-center">
+                <!-- Botón Anterior -->
+                {% if retiro_page > 1 %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('listar_boletas', retiro_page=retiro_page-1) }}" aria-label="Anterior">&laquo;</a>
+                </li>
+                {% endif %}
+    
+                <!-- Números de Página -->
+                {% for p in range(1, retiro_total_paginas + 1) %}
+                <li class="page-item {% if p == retiro_page %}active{% endif %}">
+                    <a class="page-link" href="{{ url_for('listar_boletas', retiro_page=p) }}">{{ p }}</a>
+                </li>
+                {% endfor %}
+    
+                <!-- Botón Siguiente -->
+                {% if retiro_page < retiro_total_paginas %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('listar_boletas', retiro_page=retiro_page+1) }}" aria-label="Siguiente">&raquo;</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+
+<!-- Modal para modificar retiro -->
+<div class="modal fade" id="modalModificarRetiro" tabindex="-1" aria-labelledby="modalModificarRetiroLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalModificarRetiroLabel">Modificar Retiro</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="POST" action="{{ url_for('modificar_retiro') }}">
+                <div class="modal-body">
+                    <input type="hidden" name="id" id="retiroId">
+                    <div class="mb-3">
+                        <label for="monto" class="form-label">Monto</label>
+                        <input type="number" class="form-control;" id="retiroMonto" name="monto" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="metodoPago" class="form-label">Método de Pago</label>
+                        <select class="form-select" id="retiroMetodoPago" name="metodo_pago" required>
+                            <option value="Efectivo">Efectivo</option>
+                            <option value="Transferencia">Transferencia</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="descripcion" class="form-label">Descripción</label>
+                        <input type="text" class="form-control" id="retiroDescripcion" name="descripcion" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal para Agregar Retiro -->
+<div class="modal fade" id="modalAgregarRetiro" tabindex="-1" aria-labelledby="modalAgregarRetiroLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalAgregarRetiroLabel">Agregar Retiro</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="formAgregarRetiro" method="POST" action="{{ url_for('listar_boletas') }}">
+                    <div class="mb-3">
+                        <label for="monto" class="form-label">Monto</label>
+                        <input type="number" class="form-control" id="monto" name="monto" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="descripcion" class="form-label">Descripción</label>
+                        <input type="text" class="form-control" id="descripcion" name="descripcion" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="metodo_pago" class="form-label">Método de Pago</label>
+                        <select class="form-select" id="metodo_pago" name="metodo_pago" required>
+                            <option value="efectivo">Efectivo</option>
+                            <option value="transferencia">Transferencia</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-success w-100">Guardar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const modalModificarRetiro = document.getElementById('modalModificarRetiro');
+        modalModificarRetiro.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;
+            const id = button.getAttribute('data-id');
+            const monto = button.getAttribute('data-monto').replace(/[^\d.]/g, ''); // Eliminar puntos y símbolos CLP
+            const metodoPago = button.getAttribute('data-metodo-pago');
+            const descripcion = button.getAttribute('data-descripcion');
+
+            // Configurar los campos del modal
+            modalModificarRetiro.querySelector('#retiroId').value = id;
+            modalModificarRetiro.querySelector('#retiroMonto').value = monto;
+            modalModificarRetiro.querySelector('#retiroMetodoPago').value = metodoPago;
+            modalModificarRetiro.querySelector('#retiroDescripcion').value = descripcion;
+        });
+    });
+
+    </script>
+    
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Análisis de Ventas{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="text-center" style="text-align: center; font-style: italic; font-family: 'Times New Roman', Times, serif; font-size: 50px; background-color: rgba(192, 211, 227, 0.575);">Análisis de Ventas</h1>
+
+    <div class="row mt-5">
+        <!-- Ventas Diarias -->
+        <div class="col-lg-6 col-md-12 mb-4">
+            <h3 class="text-center" style="color: #000000; font-weight: bold;">Ventas Diarias</h3>
+            <div class="text-center">
+                <img src="data:image/png;base64,{{ img_url_ventas_diarias }}" alt="Ventas Diarias" class="img-fluid rounded shadow-lg">
+            </div>
+        </div>
+
+        <!-- Ventas Mensuales -->
+        <div class="col-lg-6 col-md-12 mb-4">
+            <h3 class="text-center" style="color: #000000; font-weight: bold;">Ventas Mensuales</h3>
+            <div class="text-center">
+                <img src="data:image/png;base64,{{ img_url_ventas_mensuales }}" alt="Ventas Mensuales" class="img-fluid rounded shadow-lg">
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

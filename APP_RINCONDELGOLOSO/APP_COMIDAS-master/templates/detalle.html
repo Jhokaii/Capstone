@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}Flujo de Caja{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+        <!-- Botón para regresar al Home -->
+    <div class="mb-3">
+    <a href="{{ url_for('home') }}" class="btn btn-primary">
+        &#8592; Volver al Inicio
+    </a>
+    </div>
+    <h1 style="text-align: center; font-style: italic; ">Flujo de Caja</h1>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>ID Pago</th>
+                <th>Fecha y Hora</th>
+                <th>Productos</th>
+                <th>Método de Pago</th>
+                <th>Monto Total</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for id_pago, registros_pago in registros|sort(attribute='id_pago')|groupby('id_pago') %}
+            <tr>
+                <!-- Mostrar ID de Pago y Fecha solo una vez por grupo -->
+                <td rowspan="{{ registros_pago|length }}">{{ registros_pago[0].id_pago }}</td>
+                <td rowspan="{{ registros_pago|length }}">{{ registros_pago[0].fecha_pago }}</td>
+                
+                <!-- Primera fila del grupo: primer producto -->
+                <td>{{ registros_pago[0].producto }} (Cantidad: {{ registros_pago[0].cantidad }})</td>
+                <td rowspan="{{ registros_pago|length }}">{{ registros_pago[0].metodo_pago }}</td>
+                <td rowspan="{{ registros_pago|length }}">${{ registros_pago[0].monto_total }}</td>
+            </tr>
+            <!-- Filas adicionales para los demás productos -->
+            {% for registro in registros_pago[1:] %}
+            <tr>
+                <td>{{ registro.producto }} (Cantidad: {{ registro.cantidad }})</td>
+            </tr>
+            {% endfor %}
+            <!-- Agregar una fila vacía con una línea de separación -->
+            <tr>
+                <td colspan="5" class="table-borderless"><hr></td>
+            </tr>
+            {% endfor %}
+            
+        </tbody>
+    </table>
+
+<!-- Contenedor de la Paginación -->
+<!-- Navegación de Páginas -->
+<div class="pagination-container">
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+            <!-- Botón Anterior -->
+            {% if page > 1 %}
+            <li class="page-item">
+                <a class="page-link" href="{{ url_for('detalle', page=page-1) }}" aria-label="Anterior">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            {% endif %}
+            
+            <!-- Números de Página -->
+            {% for p in range(1, total_paginas + 1) %}
+            <li class="page-item {% if p == page %}active{% endif %}">
+                <a class="page-link" href="{{ url_for('detalle', page=p) }}">{{ p }}</a>
+            </li>
+            {% endfor %}
+            
+            <!-- Botón Siguiente -->
+            {% if page < total_paginas %}
+            <li class="page-item">
+                <a class="page-link" href="{{ url_for('detalle', page=page+1) }}" aria-label="Siguiente">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
+
+
+{% endblock %}
